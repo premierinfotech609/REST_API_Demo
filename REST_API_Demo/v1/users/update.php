@@ -12,23 +12,20 @@ include_once '../../class/Users.php';
 $database = new Database();
 $db = $database->getConnection();
 $users = new Users($db);
-$data = new \stdClass();
 
+$data = json_decode(file_get_contents("php://input"),1);
 if(isset($_REQUEST) && !empty($_REQUEST)){
 	$api_key = $_REQUEST['api_key'];
-	$data->id = $_REQUEST['id'];
-	$data->points = $_REQUEST['points'];
-}else{
-	$api_key = $_GET['api_key'];
-	$data = json_decode(file_get_contents("php://input"),1);
+	$data["id"] = isset($data['id']) ? $data['id'] : $_REQUEST['id'];
+	$data["points"] = isset($data['points']) ? $data['points'] : $_REQUEST['points'];
 }
 
 if(!empty($api_key) && API_KEY === $api_key){
 
-	if(!empty($data->id) && !empty($data->points)){ 
+	if(!empty($data["id"]) && !empty($data["points"])){ 
 		
-		$users->id = $data->id; 
-		$users->points = $data->points;
+		$users->id = $data["id"]; 
+		$users->points = $data["points"];
 		$result = $users->read();	//	Fetching Users Data to verify if User ID exist in the System or not.
 
 		if($result->num_rows > 0){
