@@ -5,7 +5,7 @@ CREATE TABLE `users` (
   `age` tinyint(4) NOT NULL,
   `points` int(11) NOT NULL DEFAULT 0,
   `address` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `modified_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 --
