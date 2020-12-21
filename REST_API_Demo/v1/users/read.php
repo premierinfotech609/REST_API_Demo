@@ -55,4 +55,5 @@ if(!empty($api_key) && API_KEY === $api_key){
 }else{
     http_response_code(401);     
     echo json_encode(array("message" => "Invalid API Key"));
-} 
+}
+?>
