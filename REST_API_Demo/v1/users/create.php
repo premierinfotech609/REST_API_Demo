@@ -12,25 +12,22 @@ include_once '../../class/Users.php';
 $database = new Database();
 $db = $database->getConnection();
 $users = new Users($db);
-$data = new \stdClass();
 
+$data = json_decode(file_get_contents("php://input"),1);
 if(isset($_REQUEST) && !empty($_REQUEST)){
     $api_key = $_REQUEST['api_key'];
-	$data->first_name = $_REQUEST['first_name'];
-	$data->age = $_REQUEST['age'];
-}else{
-	$api_key = $_GET['api_key'];
-	$data = json_decode(file_get_contents("php://input"),1);
+	$data['first_name'] = isset($data['first_name']) ? $data['first_name']: $_REQUEST['first_name'];
+	$data['age'] = isset($data['age']) ? $data['age'] : $_REQUEST['age'];
 }
 
 if(!empty($api_key) && API_KEY === $api_key){
 
-    if(!empty($data->first_name) && !empty($data->age)){    
+    if(!empty($data['first_name']) && !empty($data['age'])){    
 
-        $users->first_name = $data->first_name;
-        $users->age = $data->age;
-        $users->points = (isset($data->points) && $data->points) ? $data->points : '0';
-        $users->address = (isset($data->address) && $data->address) ? $data->address : '';	
+        $users->first_name = $data['first_name'];
+        $users->age = $data['age'];
+        $users->points = (isset($data['points']) && $data['points']) ? $data['points'] : '0';
+        $users->address = (isset($data['address']) && $data['address']) ? $data['address'] : '';	
         $users->created_at = date('Y-m-d H:i:s'); 
         
         if($users->create()){         
